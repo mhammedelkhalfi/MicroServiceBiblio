@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 11 jan. 2025 à 15:30
+-- Généré le : dim. 12 jan. 2025 à 13:09
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -284,25 +284,28 @@ CREATE TABLE `utilisateur` (
   `prenom` varchar(50) NOT NULL,
   `adressemail` varchar(100) NOT NULL,
   `motdepasse` varchar(255) NOT NULL,
-  `role` enum('ADMIN','UTILISATEUR') NOT NULL
+  `role` enum('ADMIN','UTILISATEUR') NOT NULL,
+  `status` enum('AUTHORIZED','BLACKLISTED','LACKOFRESOURCES') DEFAULT 'AUTHORIZED',
+  `credit` double DEFAULT 500,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `adressemail`, `motdepasse`, `role`) VALUES
-(1, 'Dupont', 'Jean', 'jean.dupont@gmail.com', 'password123', 'UTILISATEUR'),
-(2, 'Martin', 'Claire', 'claire.martin@gmail.com', 'password123', 'ADMIN'),
-(3, 'Durand', 'Paul', 'paul.durand@gmail.com', 'password123', 'UTILISATEUR'),
-(4, 'Moreau', 'Julie', 'julie.moreau@gmail.com', 'password123', 'UTILISATEUR'),
-(5, 'Blanc', 'Pierre', 'pierre.blanc@gmail.com', 'password123', 'UTILISATEUR'),
-(6, 'Petit', 'Lucie', 'lucie.petit@gmail.com', 'password123', 'UTILISATEUR'),
-(7, 'Garcia', 'Antoine', 'antoine.garcia@gmail.com', 'password123', 'UTILISATEUR'),
-(8, 'Rousseau', 'Emma', 'emma.rousseau@gmail.com', 'password123', 'ADMIN'),
-(9, 'Fournier', 'Lucas', 'lucas.fournier@gmail.com', 'password123', 'UTILISATEUR'),
-(10, 'Bernard', 'Sophie', 'sophie.bernard@gmail.com', 'password123', 'UTILISATEUR'),
-(11, 'yahya', 'kassani', 'yahya.kassani@gmail.com', 'yahya123', 'UTILISATEUR');
+INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `adressemail`, `motdepasse`, `role`, `status`, `credit`, `created_at`) VALUES
+(1, 'Dupont', 'Jean', 'jean.dupont@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(2, 'Martin', 'Claire', 'claire.martin@gmail.com', 'password123', 'ADMIN', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(3, 'Durand', 'Paul', 'paul.durand@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(4, 'Moreau', 'Julie', 'julie.moreau@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(5, 'Blanc', 'Pierre', 'pierre.blanc@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(6, 'Petit', 'Lucie', 'lucie.petit@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(7, 'Garcia', 'Antoine', 'antoine.garcia@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(8, 'Rousseau', 'Emma', 'emma.rousseau@gmail.com', 'password123', 'ADMIN', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(9, 'Fournier', 'Lucas', 'lucas.fournier@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(10, 'Bernard', 'Sophie', 'sophie.bernard@gmail.com', 'password123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05'),
+(11, 'yahya', 'kassani', 'yahya.kassani@gmail.com', 'yahya123', 'UTILISATEUR', 'AUTHORIZED', 500, '2025-01-12 11:31:05');
 
 -- --------------------------------------------------------
 
