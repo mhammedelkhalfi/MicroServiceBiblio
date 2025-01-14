@@ -121,7 +121,7 @@ try {
 
 // Récupérer les emprunts
 try {
-    $sql = "SELECT * FROM emprunts"; // Assurez-vous que cette table existe dans votre base de données
+    $sql = "SELECT * FROM livre"; // Assurez-vous que cette table existe dans votre base de données
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $emprunts = $stmt->fetchAll(PDO::FETCH_ASSOC);
