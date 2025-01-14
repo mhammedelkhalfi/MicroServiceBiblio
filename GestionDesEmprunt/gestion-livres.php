@@ -24,41 +24,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         $image = $_FILES['image'] ?? null;
 
         if (!empty($titre) && !empty($auteur)) {
+            
             // Gérer le téléchargement de l'image
-            if ($image && $image['error'] === 0) {
-                $target_dir = "uploads/";
-                $target_file = $target_dir . basename($image['name']);
-                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+if ($image && $image['error'] === 0) {
+    // Définir le dossier de destination
+    $target_dir = "C:/xampp/htdocs/MicroServiceBiblio/images/";
+    $target_file = $target_dir . basename($image['name']);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-                // Vérifiez le type d'image
-                $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-                if (in_array($imageFileType, $allowed_types)) {
-                    if (move_uploaded_file($image['tmp_name'], $target_file)) {
-                        // Enregistrer le livre avec l'image
-                        try {
-                            $sql = "INSERT INTO livre (titre, auteur, image, disponibilite, type) 
-                                    VALUES (:titre, :auteur, :image, :disponibilite, :type)";
-                            $stmt = $pdo->prepare($sql);
-                            $stmt->execute([ 
-                                ':titre' => $titre,
-                                ':auteur' => $auteur,
-                                ':image' => $target_file,
-                                ':disponibilite' => $disponibilite,
-                                ':type' => $type
-                            ]);
-                            $success = "Livre ajouté avec succès!";
-                        } catch (PDOException $e) {
-                            $error = "Erreur lors de l'ajout du livre : " . $e->getMessage();
-                        }
-                    } else {
-                        $error = "Erreur lors du téléchargement de l'image.";
-                    }
-                } else {
-                    $error = "Seuls les formats jpg, jpeg, png, et gif sont autorisés.";
-                }
-            } else {
-                $error = "Veuillez sélectionner une image.";
+    // Vérifiez le type d'image
+    $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+    if (in_array($imageFileType, $allowed_types)) {
+        if (move_uploaded_file($image['tmp_name'], $target_file)) {
+            // Enregistrer le chemin relatif dans la base de données
+            $relative_path = "../images/" . basename($image['name']);
+            try {
+                $sql = "INSERT INTO livre (titre, auteur, image, disponibilite, type) 
+                        VALUES (:titre, :auteur, :image, :disponibilite, :type)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    ':titre' => $titre,
+                    ':auteur' => $auteur,
+                    ':image' => $relative_path,
+                    ':disponibilite' => $disponibilite,
+                    ':type' => $type,
+                ]);
+                $success = "Livre ajouté avec succès!";
+            } catch (PDOException $e) {
+                $error = "Erreur lors de l'ajout du livre : " . $e->getMessage();
             }
+        } else {
+            $error = "Erreur lors du téléchargement de l'image.";
+        }
+    } else {
+        $error = "Seuls les formats jpg, jpeg, png, et gif sont autorisés.";
+    }
+} else {
+    $error = "Veuillez sélectionner une image.";
+}
+
         } else {
             $error = "Veuillez remplir tous les champs.";
         }
@@ -111,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 
 // Récupérer les livres de la base de données
 try {
-    $sql = "SELECT * FROM livre";
+    $sql = "SELECT * FROM livre where type ='pret'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -121,7 +125,7 @@ try {
 
 // Récupérer les emprunts
 try {
-    $sql = "SELECT * FROM livre"; // Assurez-vous que cette table existe dans votre base de données
+    $sql = "SELECT * FROM livre where type='pret'"; // Assurez-vous que cette table existe dans votre base de données
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $emprunts = $stmt->fetchAll(PDO::FETCH_ASSOC);

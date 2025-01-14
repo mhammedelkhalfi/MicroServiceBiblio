@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idLivre']) && isset($_POST['user_id'])) {
     $idLivre = $_POST['idLivre'];
     $user_id = $_POST['user_id'];
-    $duree = 14; // Exemple : durée par défaut de l'emprunt en jours
+    $duree = $_POST['duree'];
     $date_emprunt = date('Y-m-d');
     $date_retour = date('Y-m-d', strtotime("+$duree days"));
 

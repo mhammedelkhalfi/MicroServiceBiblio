@@ -34,10 +34,10 @@
                     <a class="nav-link active" href="gestion-livres.php">Gestion des livres a Emprunté</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="GestionDesEmprunts.php">Gestion des emprunts</a>
+                    <a class="nav-link" href="gestion-emprunts.php">Gestion des emprunts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Gestion des profils</a>
+                    <a class="nav-link" href="../GestionDesUtilisateur/admin/app/admin_dashboard.php">Gestion des profils</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="deconnexion.php">Déconnexion</a>

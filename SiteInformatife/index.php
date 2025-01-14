@@ -20,7 +20,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#accueil">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://localhost:8080/login.php">Emprunté</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -32,7 +31,7 @@
         <div class="container">
             <h1 class="display-4">Bienvenue dans votre E-Bibliothèque</h1>
             <p class="lead">Un accès instantané à une large collection de livres numériques.</p>
-            <a href="#categories" class="btn btn-light btn-lg">Découvrir les catégories</a>
+            <a href="types.php" class="btn btn-light btn-lg">Découvrir les catégories</a>
         </div>
     </header>
 

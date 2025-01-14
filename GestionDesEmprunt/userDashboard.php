@@ -22,7 +22,7 @@ if (!$user) {
 }
 
 // Récupérer les livres disponibles pour emprunt
-$stmt = $pdo->prepare("SELECT idLivre, titre, auteur, image, disponibilite, type FROM livre WHERE disponibilite = 1");
+$stmt = $pdo->prepare("SELECT idLivre, titre, auteur, image, disponibilite, type FROM livre WHERE disponibilite = 1 AND type='pret'");
 $stmt->execute();
 $livresDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -58,9 +58,10 @@ $livresDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Historiques</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../GestionDesUtilisateur/user/app/user_historique.php">Historiques</a>
+            </li>
+
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="deconnexion.php">Déconnexion</a>
                 </li>
@@ -97,11 +98,56 @@ $livresDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </td>
                     <td><?php echo htmlspecialchars($livre['type']); ?></td>
                     <td>
-                        <form method="post" action="emprunter.php">
-                            <input type="hidden" name="idLivre" value="<?php echo $livre['idLivre']; ?>">
-                            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                            <button type="submit" class="btn btn-primary">Emprunter</button>
-                        </form>
+
+                        <!-- Bouton pour ouvrir la modal -->
+                            <button 
+                                type="button" 
+                                class="btn btn-primary btn-emprunter" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#empruntModal"
+                                data-id="<?php echo $livre['idLivre']; ?>"
+                            >
+                                Emprunter
+                            </button>
+
+                            <!-- Modal Bootstrap -->
+                            <div class="modal fade" id="empruntModal" tabindex="-1" aria-labelledby="empruntModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="post" action="emprunter.php">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="empruntModalLabel">Emprunter un livre</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>Vous êtes sur le point d'emprunter ce livre. Veuillez spécifier la durée de l'emprunt :</strong></p>
+                                                <div class="mb-3">
+                                                    <label for="duree" class="form-label">Durée (en jours)</label>
+                                                    <input type="number" class="form-control" id="duree" name="duree" min="1" max="30" required>
+                                                </div>
+                                                <input type="hidden" id="idLivre" name="idLivre">
+                                                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-primary">Confirmer</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Script pour gérer la modal -->
+                            <script>
+                                // Ajouter l'ID du livre dans la modal lors de l'ouverture
+                                document.querySelectorAll('.btn-emprunter').forEach(button => {
+                                    button.addEventListener('click', () => {
+                                        const idLivre = button.getAttribute('data-id');
+                                        document.getElementById('idLivre').value = idLivre;
+                                    });
+                                });
+                            </script>
+
                     </td>
                 </tr>
             <?php endforeach; ?>

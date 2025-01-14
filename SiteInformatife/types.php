@@ -89,7 +89,7 @@ include 'connexion.php';
                         <i class="fas fa-book-reader text-primary"></i>
                     </div>
                     <h3 class="mb-4">Emprunter</h3>
-                    <a href="livres_disponibles.php?type=pret" class="btn btn-primary w-100">
+                    <a href="../GestionDesEmprunt/login.php" class="btn btn-primary w-100">
                         Livres à Emprunter
                     </a>
                 </div>
@@ -100,7 +100,7 @@ include 'connexion.php';
                         <i class="fas fa-money-bill-wave text-warning"></i>
                     </div>
                     <h3 class="mb-4">Louer</h3>
-                    <a href="livres_disponibles.php?type=location" class="btn btn-warning w-100">
+                    <a href="#" class="btn btn-warning w-100">
                         Livres à Louer
                     </a>
                 </div>
@@ -111,7 +111,7 @@ include 'connexion.php';
                         <i class="fas fa-shopping-cart text-success"></i>
                     </div>
                     <h3 class="mb-4">Acheter</h3>
-                    <a href="livres_disponibles.php?type=vendre" class="btn btn-success w-100">
+                    <a href="#" class="btn btn-success w-100">
                         Livres à Vendre
                     </a>
                 </div>
