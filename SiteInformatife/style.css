@@ -1,0 +1,22 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+header {
+    background: linear-gradient(to right, #0066cc, #004d99);
+}
+
+.card img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+#contact-btn:hover {
+    background: #004d99;
+    transition: 0.3s;
+}
