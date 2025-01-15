@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
             // Gérer le téléchargement de l'image
 if ($image && $image['error'] === 0) {
     // Définir le dossier de destination
-    $target_dir = "C:/xampp/htdocs/MicroServiceBiblio/images/";
+    $target_dir = "images/";
     $target_file = $target_dir . basename($image['name']);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -37,7 +37,7 @@ if ($image && $image['error'] === 0) {
     if (in_array($imageFileType, $allowed_types)) {
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
             // Enregistrer le chemin relatif dans la base de données
-            $relative_path = "../images/" . basename($image['name']);
+            $relative_path = "images/" . basename($image['name']);
             try {
                 $sql = "INSERT INTO livre (titre, auteur, image, disponibilite, type) 
                         VALUES (:titre, :auteur, :image, :disponibilite, :type)";

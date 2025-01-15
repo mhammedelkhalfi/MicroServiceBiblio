@@ -50,6 +50,9 @@ try {
     <title>Livres à Vendre</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -73,11 +76,47 @@ try {
         .btn-custom:hover {
             background-color: #218838;
         }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .nav-link:hover {
+            color: #ffcc00 !important;
+        }
+        .text-danger {
+            color: red !important;
+        }
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tableau de Bord</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="../GestionDesUtilisateur/user/app/user_notifications.php">Notification</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../GestionDesUtilisateur/user/app/user_dashboard.php">User Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../GestionDesUtilisateur/user/app/user_historique.php">Historiques</a>
+            </li>
+
+                <li class="nav-item">
+                <button class="btn btn-danger float-end" id="logoutBtn">Se Déconnecter</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
     <div class="container mt-5">
-        <button class="btn btn-danger float-end" id="logoutBtn">Se Déconnecter</button>
         <h1 class="text-center mb-4">Livres à Vendre</h1>
         <div class="row">
             <?php foreach ($livres as $livre): ?>

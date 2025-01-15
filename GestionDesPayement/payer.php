@@ -67,6 +67,13 @@ try {
             $stmtUpdateCredit->bindParam(':userId', $userId, PDO::PARAM_INT);
             $stmtUpdateCredit->execute();
 
+            $sqlUpdateLivre = "UPDATE livre SET idUtilisateur = :idUtilisateur WHERE idLivre = :idLivre";
+            $stmtUpdateLivre = $pdo->prepare($sqlUpdateLivre);
+            $stmtUpdateLivre->bindParam(':idUtilisateur', $userId, PDO::PARAM_INT);
+            $stmtUpdateLivre->bindParam(':idLivre', $idLivre, PDO::PARAM_INT);
+            $stmtUpdateLivre->execute();
+
+
             echo json_encode(['status' => 'success', 'idLivre' => $idLivre]);
             exit;
         } else {

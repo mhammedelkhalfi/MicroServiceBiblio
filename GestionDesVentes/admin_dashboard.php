@@ -121,6 +121,7 @@ $mysqli->close();
                     <li class="nav-item"><a class="nav-link" href="admin_dashboard.php">Accueil</a></li>
                     <li class="nav-item"><a class="nav-link" href="add_book.php">Ajouter un Livre</a></li>
                     <li class="nav-item"><a class="nav-link" href="manage_books.php">Gérer les Livres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../GestionDesUtilisateur/admin/app/admin_dashboard.php">Gérer les Utilisateurs</a></li>
                 </ul>
                 <span class="navbar-text ms-auto">Connecté en tant que <strong><?php echo $_SESSION['user_name']; ?></strong></span>
                 <a href="deconnexion.php" class="btn btn-outline-light ms-3">Se déconnecter</a>

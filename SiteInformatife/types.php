@@ -100,7 +100,7 @@ include 'connexion.php';
                         <i class="fas fa-money-bill-wave text-warning"></i>
                     </div>
                     <h3 class="mb-4">Louer</h3>
-                    <a href="#" class="btn btn-warning w-100">
+                    <a href="comming.php" class="btn btn-warning w-100">
                         Livres à Louer
                     </a>
                 </div>
@@ -111,7 +111,7 @@ include 'connexion.php';
                         <i class="fas fa-shopping-cart text-success"></i>
                     </div>
                     <h3 class="mb-4">Acheter</h3>
-                    <a href="#" class="btn btn-success w-100">
+                    <a href="../GestionDesVentes/login.php" class="btn btn-success w-100">
                         Livres à Vendre
                     </a>
                 </div>
