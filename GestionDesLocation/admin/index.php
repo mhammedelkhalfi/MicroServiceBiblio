@@ -4,15 +4,14 @@ require_once '../connexion.php';
 // Gestion de la recherche
 $search = $_GET['search'] ?? '';
 
-// Récupération des livres de location
+// Récupération des livres pour location uniquement
 $query = "
-    SELECT l.idLivre, l.titre, l.auteur, ll.prix, ll.duree, ll.date_emprunt, ll.date_retour
-    FROM livre l
-    INNER JOIN livre_de_location ll ON l.idLivre = ll.idLivre
-    WHERE l.type = 'location' 
+    SELECT idLivre, titre, auteur, image, disponibilite 
+    FROM livre 
+    WHERE type = 'location'
 ";
 if (!empty($search)) {
-    $query .= " AND (l.titre LIKE :search OR l.auteur LIKE :search)";
+    $query .= " AND (titre LIKE :search OR auteur LIKE :search)";
 }
 $stmt = $pdo->prepare($query);
 if (!empty($search)) {
@@ -51,10 +50,8 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <tr>
             <th>Titre</th>
             <th>Auteur</th>
-            <th>Prix</th>
-            <th>Durée (jours)</th>
-            <th>Date d'emprunt</th>
-            <th>Date de retour</th>
+            <th>Image</th>
+            <th>Disponibilité</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -63,18 +60,15 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <td><?= htmlspecialchars($livre['titre']) ?></td>
                 <td><?= htmlspecialchars($livre['auteur']) ?></td>
-                <td><?= htmlspecialchars($livre['prix']) ?> €/jour</td>
-                <td><?= htmlspecialchars($livre['duree'] ?? 'N/A') ?></td>
-                <td><?= htmlspecialchars($livre['date_emprunt'] ?? 'N/A') ?></td>
-                <td><?= htmlspecialchars($livre['date_retour'] ?? 'N/A') ?></td>
+                <td><img src="<?= htmlspecialchars($livre['image']) ?>" alt="Image du livre" style="width: 50px; height: 50px;"></td>
+                <td><?= $livre['disponibilite'] ? 'Disponible' : 'Indisponible' ?></td>
                 <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" 
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
                             data-id="<?= $livre['idLivre'] ?>"
                             data-titre="<?= htmlspecialchars($livre['titre']) ?>"
                             data-auteur="<?= htmlspecialchars($livre['auteur']) ?>"
-                            data-prix="<?= $livre['prix'] ?>"
-                            data-date-emprunt="<?= $livre['date_emprunt'] ?>"
-                            data-date-retour="<?= $livre['date_retour'] ?>">
+                            data-image="<?= htmlspecialchars($livre['image']) ?>"
+                            data-disponibilite="<?= $livre['disponibilite'] ?>">
                         Modifier
                     </button>
                     <a href="delete.php?id=<?= $livre['idLivre'] ?>" class="btn btn-danger btn-sm"
@@ -90,7 +84,7 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="add.php">
+            <form method="POST" action="add.php" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Ajouter un Livre</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -105,25 +99,15 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" class="form-control" id="auteur" name="auteur" required>
                     </div>
                     <div class="mb-3">
-                        <label for="prix" class="form-label">Prix par jour</label>
-                        <input type="number" class="form-control" id="prix" name="prix" step="0.01" required>
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
                     </div>
                     <div class="mb-3">
-                        <label for="choix" class="form-label">Choisir une méthode</label><br>
-                        <input type="radio" id="choixDuree" name="choix" value="duree" checked>
-                        <label for="choixDuree">Durée en jours</label>
-                        <input type="radio" id="choixDates" name="choix" value="dates">
-                        <label for="choixDates">Dates fixes</label>
-                    </div>
-                    <div id="dureeContainer" class="mb-3">
-                        <label for="duree" class="form-label">Durée (jours)</label>
-                        <input type="number" class="form-control" id="duree" name="duree">
-                    </div>
-                    <div id="datesContainer" class="mb-3" style="display: none;">
-                        <label for="date_emprunt" class="form-label">Date d'emprunt</label>
-                        <input type="date" class="form-control" id="date_emprunt" name="date_emprunt">
-                        <label for="date_retour" class="form-label">Date de retour</label>
-                        <input type="date" class="form-control" id="date_retour" name="date_retour">
+                        <label for="disponibilite" class="form-label">Disponibilité</label>
+                        <select class="form-select" id="disponibilite" name="disponibilite" required>
+                            <option value="1">Disponible</option>
+                            <option value="0">Indisponible</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -139,7 +123,7 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="edit.php">
+            <form method="POST" action="edit.php" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Modifier un Livre</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -155,16 +139,15 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" class="form-control" id="editAuteur" name="auteur" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editPrix" class="form-label">Prix par jour</label>
-                        <input type="number" class="form-control" id="editPrix" name="prix" step="0.01" required>
+                        <label for="editImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="editImage" name="image" accept="image/*">
                     </div>
                     <div class="mb-3">
-                        <label for="editDateEmprunt" class="form-label">Date d'emprunt</label>
-                        <input type="date" class="form-control" id="editDateEmprunt" name="date_emprunt" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editDateRetour" class="form-label">Date de retour</label>
-                        <input type="date" class="form-control" id="editDateRetour" name="date_retour" required>
+                        <label for="editDisponibilite" class="form-label">Disponibilité</label>
+                        <select class="form-select" id="editDisponibilite" name="disponibilite" required>
+                            <option value="1">Disponible</option>
+                            <option value="0">Indisponible</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,26 +160,6 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-    // Gestion des champs de formulaire (ajout)
-    const choixDuree = document.getElementById('choixDuree');
-    const choixDates = document.getElementById('choixDates');
-    const dureeContainer = document.getElementById('dureeContainer');
-    const datesContainer = document.getElementById('datesContainer');
-
-    choixDuree.addEventListener('change', () => {
-        if (choixDuree.checked) {
-            dureeContainer.style.display = 'block';
-            datesContainer.style.display = 'none';
-        }
-    });
-
-    choixDates.addEventListener('change', () => {
-        if (choixDates.checked) {
-            dureeContainer.style.display = 'none';
-            datesContainer.style.display = 'block';
-        }
-    });
-
     // Préremplir le modal de modification
     const editModal = document.getElementById('editModal');
     editModal.addEventListener('show.bs.modal', (event) => {
@@ -205,9 +168,7 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.getElementById('editId').value = button.getAttribute('data-id');
         document.getElementById('editTitre').value = button.getAttribute('data-titre');
         document.getElementById('editAuteur').value = button.getAttribute('data-auteur');
-        document.getElementById('editPrix').value = button.getAttribute('data-prix');
-        document.getElementById('editDateEmprunt').value = button.getAttribute('data-date-emprunt');
-        document.getElementById('editDateRetour').value = button.getAttribute('data-date-retour');
+        document.getElementById('editDisponibilite').value = button.getAttribute('data-disponibilite');
     });
 </script>
 

@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
     $idLivre = $_GET['id'];
 
     // Préparer et exécuter la requête de suppression
-    $stmt = $pdo->prepare("DELETE FROM livre_de_location WHERE idLivre = :idLivre");
+    $stmt = $pdo->prepare("DELETE FROM livre WHERE idLivre = :idLivre");
     $stmt->bindValue(':idLivre', $idLivre);
 
     if ($stmt->execute()) {
