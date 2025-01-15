@@ -24,7 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['nom'] . " " . $user['prenom'];
             $_SESSION['user_role'] = $user['role'];
-            header("Location: dashboard.php");
+
+            // Redirection selon le rôle de l'utilisateur
+            if ($user['role'] === 'ADMIN') {
+                header("Location: admin_dashboard.php");
+            } else {
+                header("Location: dashboard.php");
+            }
             exit();
         } else {
             $error = "Mot de passe incorrect.";

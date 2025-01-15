@@ -12,7 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $prenom = $conn->real_escape_string($_POST['prenom']);
     $adressemail = $conn->real_escape_string($_POST['adressemail']);
     $motdepasse = password_hash($_POST['motdepasse'], PASSWORD_BCRYPT);
-    $role = "UTILISATEUR"; // Valeur par défaut
+    $role = $conn->real_escape_string($_POST['role']);
+
+    // Validation du rôle
+    if (!in_array($role, ['ADMIN', 'UTILISATEUR'])) {
+        die("Rôle invalide.");
+    }
 
     // Insertion dans la table utilisateur
     $sql = "INSERT INTO utilisateur (nom, prenom, adressemail, motdepasse, role) 
@@ -52,6 +57,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="mb-3">
             <label for="motdepasse" class="form-label">Mot de passe</label>
             <input type="password" class="form-control" id="motdepasse" name="motdepasse" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Rôle</label>
+            <select class="form-control" id="role" name="role" required>
+                <option value="UTILISATEUR">Utilisateur</option>
+                <option value="ADMIN">Administrateur</option>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
     </form>
