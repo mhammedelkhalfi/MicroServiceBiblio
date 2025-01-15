@@ -1,43 +1,33 @@
 <?php
 require_once '../connexion.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupération des données du formulaire
+// Vérifier si l'ID du livre est passé
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['idLivre'])) {
     $idLivre = $_POST['idLivre'];
     $titre = $_POST['titre'];
     $auteur = $_POST['auteur'];
-    $prix = $_POST['prix'];
-    $dateEmprunt = $_POST['date_emprunt'];
-    $dateRetour = $_POST['date_retour'];
+    $image = $_POST['image']; // Assuming you want to update the image field too
+    $disponibilite = $_POST['disponibilite']; // Assuming you have a field for availability
 
-    // Calcul de la durée
-    $date1 = new DateTime($dateEmprunt);
-    $date2 = new DateTime($dateRetour);
-    $duree = $date1->diff($date2)->days;
-
-    // Mise à jour des informations dans la base de données
-    $query = "
-        UPDATE livre l
-        INNER JOIN livre_de_location ll ON l.idLivre = ll.idLivre
-        SET l.titre = :titre, l.auteur = :auteur, ll.prix = :prix, 
-            ll.date_emprunt = :date_emprunt, ll.date_retour = :date_retour, ll.duree = :duree
-        WHERE l.idLivre = :idLivre
-    ";
-
-    $stmt = $pdo->prepare($query);
+    // Préparer et exécuter la requête de mise à jour
+    $stmt = $pdo->prepare("UPDATE livre SET titre = :titre, auteur = :auteur, image = :image, disponibilite = :disponibilite, type = 'location' WHERE idLivre = :idLivre");
     $stmt->bindValue(':titre', $titre);
     $stmt->bindValue(':auteur', $auteur);
-    $stmt->bindValue(':prix', $prix);
-    $stmt->bindValue(':date_emprunt', $dateEmprunt);
-    $stmt->bindValue(':date_retour', $dateRetour);
-    $stmt->bindValue(':duree', $duree);
+    $stmt->bindValue(':image', $image);
+    $stmt->bindValue(':disponibilite', $disponibilite);
     $stmt->bindValue(':idLivre', $idLivre);
 
     if ($stmt->execute()) {
-        // Redirection après mise à jour
-        header('Location: index.php?message=Mise à jour réussie');
+        // Redirection vers la page d'index avec un message de succès
+        header('Location: index.php?message=Livre modifié avec succès');
         exit;
     } else {
-        echo "Erreur lors de la mise à jour : " . implode(", ", $stmt->errorInfo());
+        // Gérer l'erreur
+        echo "Erreur lors de la mise à jour du livre.";
     }
+} else {
+    // Redirection en cas d'accès incorrect
+    header('Location: index.php');
+    exit;
 }
+?>
