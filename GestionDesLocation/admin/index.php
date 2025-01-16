@@ -28,6 +28,15 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Livres de Location</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
@@ -44,40 +53,37 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Bouton pour ajouter un livre -->
     <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addModal">Ajouter un Livre</button>
 
-    <!-- Tableau des livres -->
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Auteur</th>
-            <th>Image</th>
-            <th>Disponibilité</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
+    <!-- Liste des livres sous forme de cartes -->
+    <div class="row">
         <?php foreach ($livres as $livre): ?>
-            <tr>
-                <td><?= htmlspecialchars($livre['titre']) ?></td>
-                <td><?= htmlspecialchars($livre['auteur']) ?></td>
-                <td><img src="<?= htmlspecialchars($livre['image']) ?>" alt="Image du livre" style="width: 50px; height: 50px;"></td>
-                <td><?= $livre['disponibilite'] ? 'Disponible' : 'Indisponible' ?></td>
-                <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
-                            data-id="<?= $livre['idLivre'] ?>"
-                            data-titre="<?= htmlspecialchars($livre['titre']) ?>"
-                            data-auteur="<?= htmlspecialchars($livre['auteur']) ?>"
-                            data-image="<?= htmlspecialchars($livre['image']) ?>"
-                            data-disponibilite="<?= $livre['disponibilite'] ?>">
-                        Modifier
-                    </button>
-                    <a href="delete.php?id=<?= $livre['idLivre'] ?>" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
-                </td>
-            </tr>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="<?= htmlspecialchars($livre['image']) ?>" class="card-img-top" alt="Image du livre">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= htmlspecialchars($livre['titre']) ?></h5>
+                        <p class="card-text">
+                            Auteur: <?= htmlspecialchars($livre['auteur']) ?><br>
+                            Disponibilité: <?= $livre['disponibilite'] ? 'Disponible' : 'Indisponible' ?>
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    data-id="<?= $livre['idLivre'] ?>"
+                                    data-titre="<?= htmlspecialchars($livre['titre']) ?>"
+                                    data-auteur="<?= htmlspecialchars($livre['auteur']) ?>"
+                                    data-image="<?= htmlspecialchars($livre['image']) ?>"
+                                    data-disponibilite="<?= $livre['disponibilite'] ?>">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <a href="delete.php?id=<?= $livre['idLivre'] ?>" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php endforeach; ?>
-        </tbody>
-    </table>
+    </div>
 </div>
 
 <!-- Modal d'ajout -->
@@ -173,5 +179,6 @@ $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </body>
 </html>
